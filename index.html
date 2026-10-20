@@ -1,0 +1,437 @@
+<title>Dayra</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Dayra turns your habits into one glowing orb a day. Build more of what you want, limit what you don't, and win your day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600;700&display=swap">
+<style>
+/* Layout: one calm column with a live orb hero; sections alternate text and a working piece of the app. */
+:root {
+  --bg: #F2F2F5; --surface: #FFFFFF; --text: #111114; --sub: #5E5E66; --line: rgba(17,17,20,0.08);
+  --pill: #111114; --pill-text: #FFFFFF; --track: #E5E5EA; --glass: rgba(255,255,255,0.78);
+  --orb-base: radial-gradient(circle at 50% 45%, #FFFFFF 0, #E7E7EE 74%); --orb-shadow: 0 40px 80px rgba(40,40,90,0.18);
+  --orb-inner: rgba(80,80,130,0.10); --orb-rim: rgba(255,255,255,0.9); --blend: normal;
+  --ambient: radial-gradient(60% 50% at 50% 30%, rgba(140,170,255,0.30), rgba(242,242,245,0) 70%);
+  --water: #1E8FEF; --read: #E26A17; --pod: #7D45EC; --smoke: #DE4A35; --shield: #16955A; --wake: #B4600C;
+  --pro: linear-gradient(120deg,#FFE3A0,#FFC170);
+  --display: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --body: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --shadow-sm: 0 1px 2px rgba(16,16,28,0.04), 0 10px 30px rgba(16,16,28,0.06);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #08080A; --surface: #151518; --text: #F5F5F7; --sub: #A1A1A8; --line: rgba(255,255,255,0.08);
+  --pill: #F5F5F7; --pill-text: #0A0A0C; --track: #232328; --glass: rgba(28,28,32,0.72);
+  --orb-base: radial-gradient(circle at 50% 45%, #2A2A31 0, #111114 72%); --orb-shadow: 0 40px 90px rgba(0,0,0,0.7);
+  --orb-inner: rgba(0,0,0,0.45); --orb-rim: rgba(255,255,255,0.08); --blend: screen;
+  --ambient: radial-gradient(60% 50% at 50% 30%, rgba(110,90,255,0.24), rgba(8,8,10,0) 70%);
+  --water: #5CB8FF; --read: #FF9F5A; --pod: #B48CFF; --smoke: #FF7F6B; --shield: #4FD48E; --wake: #FFB347;
+  --shadow-sm: 0 10px 30px rgba(0,0,0,0.35); color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #08080A; --surface: #151518; --text: #F5F5F7; --sub: #A1A1A8; --line: rgba(255,255,255,0.08);
+  --pill: #F5F5F7; --pill-text: #0A0A0C; --track: #232328; --glass: rgba(28,28,32,0.72);
+  --orb-base: radial-gradient(circle at 50% 45%, #2A2A31 0, #111114 72%); --orb-shadow: 0 40px 90px rgba(0,0,0,0.7);
+  --orb-inner: rgba(0,0,0,0.45); --orb-rim: rgba(255,255,255,0.08); --blend: screen;
+  --ambient: radial-gradient(60% 50% at 50% 30%, rgba(110,90,255,0.24), rgba(8,8,10,0) 70%);
+  --water: #5CB8FF; --read: #FF9F5A; --pod: #B48CFF; --smoke: #FF7F6B; --shield: #4FD48E; --wake: #FFB347;
+  --shadow-sm: 0 10px 30px rgba(0,0,0,0.35); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(32px, 4.6vw, 48px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 700; }
+p { margin: 0; }
+.lede { color: var(--sub); font-size: 19px; max-width: 34em; }
+.kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); }
+:focus-visible { outline: 2px solid var(--water); outline-offset: 3px; border-radius: 8px; }
+
+/* Nav */
+nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6); background: color-mix(in srgb, var(--bg) 72%, transparent); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+nav.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 20px; letter-spacing: -0.02em; text-decoration: none; }
+.dot { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95) 0, rgba(255,255,255,0) 40%), radial-gradient(circle at 25% 72%, #6FB8FF 0, transparent 62%), radial-gradient(circle at 75% 35%, #FFA36B 0, transparent 62%), #C9B8FF; }
+.navlinks { display: flex; gap: 24px; align-items: center; font-size: 15px; font-weight: 500; color: var(--sub); }
+.navlinks a { text-decoration: none; }
+.navlinks a:hover { color: var(--text); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 22px; background: var(--pill); color: var(--pill-text); font: 600 15px var(--body); text-decoration: none; border: 0; cursor: pointer; }
+@media (max-width: 720px) { .navlinks .hide-sm { display: none; } }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -10% -20% auto; height: 760px; background: var(--ambient); pointer-events: none; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; padding-block: 72px 88px; }
+.hero h1 { font-size: clamp(56px, 9vw, 104px); line-height: 0.95; letter-spacing: -0.055em; font-weight: 700; }
+.hero h1 em { font-style: normal; font-weight: 200; letter-spacing: -0.04em; }
+.hero .lede { margin-top: 22px; }
+.stores { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.store { display: inline-flex; flex-direction: column; justify-content: center; height: 54px; padding: 0 20px; border-radius: 16px; background: var(--pill); color: var(--pill-text); text-decoration: none; }
+.store small { font-size: 11px; opacity: 0.7; font-weight: 500; }
+.store b { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.note { margin-top: 14px; font-size: 14px; color: var(--sub); }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; padding-block: 40px 64px; } }
+
+/* Orb */
+.orb { position: relative; width: var(--s, 220px); height: var(--s, 220px); animation: breathe 6s ease-in-out infinite; }
+.orb .halo { position: absolute; inset: -18%; border-radius: 50%; background: radial-gradient(circle, rgba(59,167,255,0.55) 0, rgba(255,138,61,0.35) 42%, rgba(160,107,255,0) 70%); filter: blur(30px); opacity: var(--halo, 0.4); transition: opacity .6s; }
+.orb .body { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: var(--orb-base); box-shadow: var(--orb-shadow); transition: filter .6s; }
+.orb .drift { position: absolute; inset: 0; animation: drift 26s linear infinite; }
+.orb .blob { position: absolute; border-radius: 50%; filter: blur(16px); mix-blend-mode: var(--blend); transition: opacity .7s; }
+.orb .shine { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 32% 24%, rgba(255,255,255,0.9) 0, rgba(255,255,255,0) 32%); }
+.orb .rim { position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 -16px 34px var(--orb-inner), inset 0 0 0 1px var(--orb-rim); }
+@keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+@keyframes drift { to { transform: rotate(360deg); } }
+@keyframes twinkle { 0%,100% { opacity: .3; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.1); } }
+
+/* Phone demo */
+.phone { justify-self: center; width: min(360px, 100%); border-radius: 44px; padding: 10px; background: #141417; box-shadow: 0 50px 100px rgba(20,20,40,0.25), 0 0 0 1px var(--line); }
+.screen { border-radius: 36px; background: var(--bg); padding: 26px 16px 18px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; }
+.screen::before { content: ""; position: absolute; inset: 0 0 auto; height: 320px; background: var(--ambient); pointer-events: none; }
+.screen > * { position: relative; }
+.screen .date { font-size: 13px; color: var(--sub); font-weight: 500; }
+.screen .today { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.screen .orbwrap { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 6px 0 2px; }
+.kept { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; text-align: center; }
+.hint { font-size: 12.5px; color: var(--sub); text-align: center; margin-top: -6px; }
+.rows { display: flex; flex-direction: column; gap: 7px; }
+.row { position: relative; height: 56px; border-radius: 19px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); display: flex; align-items: center; gap: 10px; padding: 0 9px; }
+.row .fill { position: absolute; inset: 0 auto 0 0; width: 0; transition: width .55s cubic-bezier(.2,.8,.2,1); }
+.row > :not(.fill) { position: relative; }
+.ic { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--surface) 70%, transparent); flex: none; }
+.ic svg { width: 19px; height: 19px; }
+.rt { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
+.rt b { font-size: 14px; font-weight: 600; }
+.rt span { font-size: 11.5px; color: var(--sub); font-weight: 500; }
+.tap { width: 36px; height: 36px; border-radius: 18px; border: 0; background: var(--surface); box-shadow: 0 1px 2px rgba(16,16,28,0.08), 0 4px 12px rgba(16,16,28,0.10); display: grid; place-items: center; color: var(--text); cursor: pointer; flex: none; }
+.tap svg { width: 17px; height: 17px; }
+.demo-label { font-size: 12px; color: var(--sub); text-align: center; }
+
+/* Sections */
+section.band { padding-block: 96px; border-top: 1px solid var(--line); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.split > * { min-width: 0; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 36px; } section.band { padding-block: 72px; } }
+.points { display: flex; flex-direction: column; gap: 14px; margin: 8px 0 0; padding: 0; list-style: none; }
+.points li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; font-size: 16px; color: var(--sub); }
+.points li b { color: var(--text); font-weight: 600; }
+.points svg { width: 22px; height: 22px; margin-top: 1px; }
+
+/* Shield card */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 28px; box-shadow: var(--shadow-sm); padding: 22px; }
+.limit { display: flex; align-items: center; gap: 12px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 17px; font-size: 13.5px; font-weight: 600; border: 1px solid var(--line); background: var(--bg); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.alias-real { text-decoration: line-through; color: var(--sub); font-weight: 500; }
+
+/* Wake */
+.sky { border-radius: 28px; min-height: 230px; padding: 24px; position: relative; overflow: hidden; color: #fff; background: linear-gradient(160deg, #27407F 0%, #C0698C 60%, #FFB07A 100%); display: flex; flex-direction: column; justify-content: space-between; }
+.sky .sun { position: absolute; right: 44px; bottom: -22px; width: 84px; height: 84px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFFFFF 0, #FFB48A 50%, #FF8E5A 100%); box-shadow: 0 0 60px rgba(255,190,110,0.85); }
+.sky .t { font-size: clamp(56px, 8vw, 76px); font-weight: 200; letter-spacing: -0.05em; line-height: 1; }
+.sky .done { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 18px; background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.3); font-size: 14px; font-weight: 600; position: relative; }
+
+/* Story cards */
+.cards { display: flex; gap: 14px; justify-content: center; }
+.story { width: 150px; aspect-ratio: 9 / 16; max-width: 100%; border-radius: 18px; position: relative; overflow: hidden; box-shadow: 0 24px 50px rgba(20,20,40,0.25); display: flex; flex-direction: column; align-items: center; padding: 14px 10px; text-align: center; flex: none; }
+.story:nth-child(2) { transform: translateY(-18px); }
+.story .k { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; opacity: .75; }
+.story .n { font-size: 54px; font-weight: 200; letter-spacing: -0.05em; line-height: 1; margin-top: auto; }
+.story .n small { font-size: 13px; opacity: .6; letter-spacing: 0; }
+.story .q { font-size: 10px; font-style: italic; font-weight: 500; margin-top: auto; line-height: 1.35; }
+.story .mini { width: 62px; height: 62px; border-radius: 50%; margin-top: 12px; background: radial-gradient(circle at 32% 26%, rgba(255,255,255,0.95) 0, rgba(255,255,255,0) 34%), radial-gradient(circle at 28% 70%, #5FB4FF 0, rgba(95,180,255,0) 60%), radial-gradient(circle at 74% 40%, #FFA060 0, rgba(255,160,96,0) 60%), radial-gradient(circle at 60% 85%, #B48CFF 0, rgba(180,140,255,0) 55%), #F3E9FF; }
+.s1 { background: linear-gradient(180deg,#FFE2BC 0%,#FFB59A 42%,#C996FF 78%,#7C6BFF 100%); color: #1B1030; }
+.s2 { background: radial-gradient(120% 70% at 50% 22%, #2E2775 0, #0D0C1F 70%); color: #fff; }
+.s3 { background: #F6F2EC; color: #141418; }
+@media (max-width: 520px) { .story { width: 31%; } .story .n { font-size: 34px; } .story:nth-child(2) { transform: none; } }
+
+/* Journey wall */
+.wall { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 360px; }
+.wall span { aspect-ratio: 1; border-radius: 50%; background: var(--track); }
+.wall span.w { background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.9) 0, rgba(255,255,255,0) 38%), radial-gradient(circle at 25% 72%, var(--a) 0, transparent 62%), radial-gradient(circle at 75% 35%, var(--b) 0, transparent 62%), #E8E3FF; }
+.wall span.f { background: transparent; border: 1px dashed var(--line); }
+
+/* Privacy */
+.promise { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
+.promise .card h3 { font-size: 18px; letter-spacing: -0.02em; margin-bottom: 6px; }
+.promise .card p { color: var(--sub); font-size: 15px; }
+@media (max-width: 860px) { .promise { grid-template-columns: 1fr; } }
+
+/* Pricing */
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
+.plan { position: relative; display: flex; flex-direction: column; gap: 4px; }
+.plan.best { border: 2px solid var(--text); }
+.plan .badge { align-self: flex-start; height: 22px; padding: 0 9px; border-radius: 11px; font-size: 11px; font-weight: 700; background: var(--pill); color: var(--pill-text); display: inline-flex; align-items: center; margin-bottom: 8px; }
+.plan .price { font-size: 40px; font-weight: 300; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.plan .per { color: var(--sub); font-size: 14px; }
+.free { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--sub); font-size: 15px; }
+.free b { color: var(--text); }
+@media (max-width: 860px) { .plans { grid-template-columns: 1fr; } }
+
+/* FAQ + footer */
+details { border-top: 1px solid var(--line); padding-block: 18px; }
+details:last-of-type { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::after { content: "+"; font-weight: 300; font-size: 24px; line-height: 1; color: var(--sub); }
+details[open] summary::after { content: "–"; }
+details p { color: var(--sub); margin-top: 10px; max-width: 42em; }
+footer { padding-block: 48px 64px; border-top: 1px solid var(--line); color: var(--sub); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 28px; justify-content: space-between; align-items: center; }
+footer nav { display: flex; gap: 22px; flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) { .orb, .orb .drift { animation: none; } }
+</style>
+
+<nav class="top" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>Dayra</a>
+    <div class="navlinks">
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#privacy">Privacy</a>
+      <a class="hide-sm" href="#pro">Pro</a>
+      <a class="btn" href="#get">Get Dayra</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <h1>Win your <em>day.</em></h1>
+      <p class="lede">Do more of what you want and less of what you don't. Every habit you keep fills one orb. Keep them all and the day is yours.</p>
+      <div class="stores" id="get">
+        <span class="store" aria-label="Coming soon to the App Store"><small>Coming soon on the</small><b>App Store</b></span>
+        <span class="store" aria-label="Coming soon to Google Play"><small>Coming soon on</small><b>Google Play</b></span>
+      </div>
+      <p class="note">For iPhone and Android. Free to start, no account needed.</p>
+    </div>
+
+    <div class="phone" aria-label="Try Dayra: tap the buttons to keep habits">
+      <div class="screen">
+        <div>
+          <div class="date" id="demoDate">Monday, 19 October</div>
+          <div class="today">Today</div>
+        </div>
+        <div class="orbwrap">
+          <div class="orb" id="orb" style="--s: 168px">
+            <div class="halo"></div>
+            <div class="body"><div class="drift" id="blobs"></div><div class="shine"></div><div class="rim"></div></div>
+          </div>
+          <div class="kept" id="kept">1 of 5 kept</div>
+          <div class="hint" id="hint">4 habits to go</div>
+        </div>
+        <div class="rows" id="rows"></div>
+        <div class="demo-label">Try it: tap + and −</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="band" id="how">
+    <div class="wrap split">
+      <div class="stack">
+        <span class="kicker">One orb a day</span>
+        <h2>Simple on top. Smart underneath.</h2>
+        <p class="lede">Dayra is one screen. Your habits, one tap each, and an orb that fills with color as you keep them. The work happens quietly in the background.</p>
+        <ul class="points">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--water)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2c3.3 3.9 6 7.3 6 10.6a6 6 0 0 1-12 0c0-3.3 2.7-6.7 6-10.6z"/></svg><span><b>More of.</b> Water, reading, podcasts, walking, journaling, or anything you name.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--smoke)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg><span><b>Less of.</b> A gentle daily limit for smoking, coffee, late nights or screen time. Smoking steps down by one each week, to a quit day.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--pod)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span><b>Close the day.</b> Pick a mood, write one line, seal the orb. Ten seconds, every night.</span></li>
+        </ul>
+      </div>
+      <div class="card stack" aria-label="October orb wall">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:18px">14 days won</b><span style="color:var(--sub);font-size:14px">of 18 so far</span></div>
+        <div class="wall" id="wall"></div>
+        <p style="color:var(--sub);font-size:14px">Every won day becomes an orb on your wall. Tap one to relive it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap split">
+      <div class="card stack" aria-label="Private limit example">
+        <div class="limit">
+          <span class="ic" style="background:color-mix(in srgb,var(--shield) 16%,transparent)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--shield)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></span>
+          <span class="rt"><b style="font-size:16px">Shield</b><span style="font-size:13px">Limit reached · shielded till 22:40 tomorrow</span></span>
+        </div>
+        <p style="color:var(--sub);font-size:15px">Shown on your screen as</p>
+        <div class="chips"><span class="chip">Shield</span><span class="chip">Focus</span><span class="chip">Clear mind</span><span class="chip">Night guard</span><span class="chip">Reset</span></div>
+      </div>
+      <div class="stack">
+        <span class="kicker">Private limits</span>
+        <h2>Hard habits, handled quietly.</h2>
+        <p class="lede">Private habits get a calm name like Shield or Focus, everywhere: Today, widgets and notifications. When you reach your limit, adult websites are blocked for 24 hours on your phone. No setup each time.</p>
+        <ul class="points">
+          <li><svg viewBox="0 0 24 24" fill="#F2B230" aria-hidden="true"><path d="M12 2.5c.7 5.2 2.7 7.4 8 8.5-5.3 1.1-7.3 3.3-8 8.5-.7-5.2-2.7-7.4-8-8.5 5.3-1.1 7.3-3.3 8-8.5z"/></svg><span><b>Urge SOS.</b> One minute of guided breathing with a letter you wrote to yourself on a strong day.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.2A10 10 0 0 1 12 5c5 0 8.5 4.5 9.5 7a13 13 0 0 1-2.6 3.7"/><path d="M6.6 6.6C4.4 8 3 10.2 2.5 12c1 2.5 4.5 7 9.5 7 1.9 0 3.6-.6 5-1.5"/></svg><span><b>Disguise and Face ID.</b> Hide every habit name with one switch, or lock Dayra completely.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap split">
+      <div class="stack">
+        <span class="kicker">Wake up</span>
+        <h2>An alarm that knows you got up.</h2>
+        <p class="lede">Set your wake time once. Dayra rings a gentle alarm on workdays, and the moment you tap “I'm up”, your first habit of the day is done.</p>
+        <p style="color:var(--sub)">Skip tomorrow when you need to. It comes back by itself the day after.</p>
+      </div>
+      <div class="sky" aria-label="Wake up card">
+        <span style="font-size:14px;font-weight:600;opacity:.85;position:relative">Wake up at</span>
+        <span class="t" style="position:relative">7:30</span>
+        <span class="done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Done · up at 7:24</span>
+        <span class="sun" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap split">
+      <div class="cards" aria-label="Story cards in three styles">
+        <div class="story s1"><span class="k">DAY 12 OF 30</span><span class="mini"></span><span class="n">12<small>/30</small></span><span class="q">“Ran 5 km before work.”</span></div>
+        <div class="story s2"><span class="k">DAY 21 OF 21</span><span class="mini" style="box-shadow:0 0 0 3px rgba(255,190,110,.95),0 0 24px rgba(255,190,110,.9)"></span><span class="n">21<small>/21</small></span><span class="q">“Three weeks of choosing yourself.”</span></div>
+        <div class="story s3"><span class="k">DAY 7 OF 14</span><span class="mini"></span><span class="n">7<small>/14</small></span><span class="q">“Shipped the login page.”</span></div>
+      </div>
+      <div class="stack">
+        <span class="kicker">Challenges</span>
+        <h2>Show up. Share it. Repeat.</h2>
+        <p class="lede">Start a 7, 14, 21 or 30 day challenge. Each day you finish becomes a story card, ready for your Instagram Story in one tap.</p>
+        <p style="color:var(--sub)">Your chain grows in public. Your habits stay private.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="privacy">
+    <div class="wrap">
+      <span class="kicker">Privacy</span>
+      <h2 style="margin-top:12px">Your day stays yours.</h2>
+      <div class="promise">
+        <div class="card"><h3>On your phone</h3><p>Your habits, moods and lines live on your device. No account, no sign-up, no tracking.</p></div>
+        <div class="card"><h3>Nothing named</h3><p>Reminders never say which habit. Private habits show a calm name everywhere.</p></div>
+        <div class="card"><h3>Blocking without watching</h3><p>Shield blocks adult sites using your phone's own tools. Dayra never sees or stores what you browse.</p></div>
+      </div>
+      <p style="margin-top:22px;color:var(--sub);font-size:15px">Read the full <a href="privacy.html">privacy policy</a>.</p>
+    </div>
+  </section>
+
+  <section class="band" id="pro">
+    <div class="wrap">
+      <span class="kicker">Dayra Pro</span>
+      <h2 style="margin-top:12px">Make every day count. Fully.</h2>
+      <p class="lede" style="margin-top:14px">Unlimited habits, the Trigger Map that shows why you slip, Then and now, Your lines, and a voice letter for hard moments.</p>
+      <div class="plans">
+        <div class="card plan best"><span class="badge">Best value</span><b>Yearly</b><span class="price">$14.99</span><span class="per">per year · $1.25 a month</span></div>
+        <div class="card plan"><b style="margin-top:30px">Monthly</b><span class="price">$1.99</span><span class="per">per month</span></div>
+        <div class="card plan"><b style="margin-top:30px">Lifetime</b><span class="price">$29.99</span><span class="per">one time</span></div>
+      </div>
+      <div class="free"><span><b>Free forever:</b> Today, the orb, limits, Shield, wake alarm, challenges and story cards.</span></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2 style="margin-bottom:24px">Questions</h2>
+      <details><summary>Do I need an account?</summary><p>No. Dayra works the moment you open it. Your data stays on your phone.</p></details>
+      <details><summary>How does Shield block websites?</summary><p>On iPhone it uses Apple's Screen Time content filter. On Android it routes only website lookups through Cloudflare's family filter while Shield is on. Dayra never sees which sites you visit, and nothing is logged.</p></details>
+      <details><summary>What happens if I miss a day?</summary><p>Nothing breaks. The orb for that day stays grey, and tomorrow is a fresh start. Challenges count the days you showed up.</p></details>
+      <details><summary>Can I cancel Pro?</summary><p>Yes, any time, in your App Store or Google Play subscriptions. Lifetime is a single purchase with nothing to cancel.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>Dayra</a>
+    <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="support.html">Support</a><span>incalbayt@gmail.com</span></nav>
+    <span>© 2026 Dayra</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Live demo: the same rules as the app. Build habits fill toward a goal; a limit is kept while under it.
+  var I = {
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+    drop: '<path d="M12 3.2c3.3 3.9 6 7.3 6 10.6a6 6 0 0 1-12 0c0-3.3 2.7-6.7 6-10.6z"/>',
+    book: '<path d="M3.5 5.5c2.9-1.2 5.7-1.2 8.5 0v13.5c-2.8-1.2-5.6-1.2-8.5 0z"/><path d="M20.5 5.5c-2.9-1.2-5.7-1.2-8.5 0v13.5c2.8-1.2 5.6-1.2 8.5 0z"/>',
+    head: '<path d="M4 15.5V12a8 8 0 0 1 16 0v3.5"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/>',
+    cig: '<rect x="2.5" y="13.5" width="16" height="4" rx="1.2"/><path d="M14.5 13.5v4"/><path d="M21.5 13.5v4"/><path d="M18.5 4.5c0 1.6 2 1.8 2 3.6s-2 2-2 3.6"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+  };
+  var H = [
+    { id: 'wake', name: 'Wake up', icon: 'sun', ink: '--wake', c: '255,170,60', c2: '255,214,120', goal: 1, v: 1, unit: '', step: 1 },
+    { id: 'water', name: 'Water', icon: 'drop', ink: '--water', c: '59,167,255', c2: '125,214,255', goal: 8, v: 3, unit: 'glasses', step: 1 },
+    { id: 'read', name: 'Reading', icon: 'book', ink: '--read', c: '255,138,61', c2: '255,197,107', goal: 20, v: 8, unit: 'pages', step: 4 },
+    { id: 'pod', name: 'Podcast', icon: 'head', ink: '--pod', c: '160,107,255', c2: '232,139,255', goal: 30, v: 0, unit: 'min', step: 10 },
+    { id: 'smoke', name: 'Smoking', icon: 'cig', ink: '--smoke', c: '255,107,90', c2: '255,179,107', max: 4, v: 3, limit: true }
+  ];
+  var svg = function (k, color, sw) { return '<svg viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="' + (sw || 1.8) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + I[k] + '</svg>'; };
+  var rows = document.getElementById('rows');
+  var blobs = document.getElementById('blobs');
+  var POS = { water: [0, 4, 76], read: [34, 30, 74], pod: [-2, 44, 66], smoke: [30, -6, 64], wake: [24, 54, 62] };
+  H.forEach(function (h) {
+    var b = document.createElement('div');
+    var p = POS[h.id];
+    b.className = 'blob'; b.id = 'b-' + h.id;
+    var c = h.limit ? '48,209,168' : h.c;
+    b.style.cssText = 'left:' + p[0] + '%;top:' + p[1] + '%;width:' + p[2] + '%;height:' + p[2] + '%;background:radial-gradient(circle, rgba(' + c + ',1) 0, rgba(' + c + ',0) 68%)';
+    blobs.appendChild(b);
+    var r = document.createElement('div');
+    r.className = 'row';
+    r.innerHTML = '<span class="fill" id="f-' + h.id + '" style="background:linear-gradient(90deg, rgba(' + h.c + ',0.5), rgba(' + h.c2 + ',0.38))"></span>' +
+      '<span class="ic">' + svg(h.icon, 'var(' + h.ink + ')') + '</span>' +
+      '<span class="rt"><b>' + h.name + '</b><span id="s-' + h.id + '"></span></span>' +
+      '<button class="tap" id="t-' + h.id + '" aria-label="' + (h.limit ? 'Log one ' : 'Add to ') + h.name + '"></button>';
+    rows.appendChild(r);
+    document.getElementById('t-' + h.id).addEventListener('click', function () {
+      if (h.limit) h.v = h.v >= h.max + 1 ? 0 : h.v + 1;
+      else h.v = h.v >= h.goal ? 0 : Math.min(h.goal, h.v + h.step);
+      render();
+    });
+  });
+  function render() {
+    var kept = 0, prog = 0;
+    H.forEach(function (h) {
+      var pct, done, sub;
+      if (h.limit) {
+        var left = h.max - h.v; done = left >= 0; pct = Math.max(0, left) / h.max;
+        sub = done ? left + ' left of ' + h.max : (-left) + ' over limit';
+        document.getElementById('b-' + h.id).style.opacity = (0.12 + 0.5 * (done ? 1 : 0)).toFixed(2);
+      } else {
+        pct = Math.min(1, h.v / h.goal); done = h.v >= h.goal; prog += pct;
+        sub = h.id === 'wake' ? (done ? 'Done · up at 7:24' : 'Alarm 7:30') : (done ? 'Done · ' + h.goal + ' ' + h.unit : h.v + ' of ' + h.goal + ' ' + h.unit);
+        document.getElementById('b-' + h.id).style.opacity = (0.1 + 0.9 * pct).toFixed(2);
+      }
+      if (done) kept++;
+      document.getElementById('f-' + h.id).style.width = Math.round(pct * 100) + '%';
+      var s = document.getElementById('s-' + h.id);
+      s.textContent = sub; s.style.color = done || !h.limit ? '' : 'var(--smoke)';
+      document.getElementById('t-' + h.id).innerHTML = h.limit ? svg('minus', 'currentColor', 2.2) : svg(done ? 'check' : 'plus', done ? 'var(' + h.ink + ')' : 'currentColor', 2.2);
+    });
+    var won = kept === H.length;
+    document.getElementById('kept').textContent = kept + ' of ' + H.length + ' kept';
+    document.getElementById('hint').textContent = won ? 'Day won. Beautiful.' : (H.length - kept) + (H.length - kept === 1 ? ' habit' : ' habits') + ' to go';
+    var orb = document.getElementById('orb');
+    orb.style.setProperty('--halo', Math.min(1, 0.2 + 0.65 * (prog / 3)).toFixed(2));
+  }
+  render();
+  try {
+    var d = new Date();
+    document.getElementById('demoDate').textContent = d.toLocaleDateString('en-GB', { weekday: 'long' }) + ', ' + d.getDate() + ' ' + d.toLocaleDateString('en-GB', { month: 'long' });
+  } catch (e) {}
+
+  // Orb wall for the Journey section
+  var wall = document.getElementById('wall');
+  var pairs = [['#7CC4FF', '#FFB070'], ['#B18CFF', '#7CE0C3'], ['#FFA36B', '#8EC8FF'], ['#7CE0C3', '#FFC66B'], ['#9DB4FF', '#FF9FC4']];
+  var miss = { 3: 1, 8: 1, 9: 1, 15: 1 };
+  for (var i = 0; i < 3; i++) { var e = document.createElement('span'); e.style.visibility = 'hidden'; wall.appendChild(e); }
+  for (var n = 1; n <= 31; n++) {
+    var c = document.createElement('span');
+    if (n > 18) c.className = 'f';
+    else if (!miss[n]) { c.className = 'w'; c.style.setProperty('--a', pairs[n % 5][0]); c.style.setProperty('--b', pairs[n % 5][1]); }
+    wall.appendChild(c);
+  }
+})();
+</script>
